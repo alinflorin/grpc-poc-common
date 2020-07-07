@@ -1,0 +1,17 @@
+syntax = "proto3";
+package weather;
+
+service Weather {
+	rpc GetWeather(GetWeatherRequest) returns (GetWeatherReply);
+}
+
+message GetWeatherRequest {
+    string address = 1;
+    bool useMetric = 2;
+}
+
+message GetWeatherReply {
+    float currentTemp = 1;
+    float currentWindSpeed = 2;
+    string summary = 3;
+}
