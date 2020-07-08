@@ -1,0 +1,21 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1beta1
+metadata:
+  name: grpc-poc
+  labels:
+    app: grpc-poc
+  annotations:
+    cert-manager.io/cluster-issuer: kubesail-letsencrypt
+    certmanager.k8s.io/cluster-issuer: kubesail-letsencrypt
+spec:
+  tls:
+    - hosts:
+        - grpc-poc.alinflorin.c1.kubesail.org
+      secretName: grpc-poc-ingress
+  rules:
+    - host: grpc-poc.alinflorin.c1.kubesail.org
+      http:
+        paths:
+          - backend:
+              serviceName: grpc-poc-ui-preact
+              servicePort: 80
