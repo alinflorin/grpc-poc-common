@@ -4,19 +4,9 @@ metadata:
   name: grpc-poc
   labels:
     app: grpc-poc
-  annotations:
-    cert-manager.io/cluster-issuer: kubesail-letsencrypt
-    certmanager.k8s.io/cluster-issuer: kubesail-letsencrypt
-    ingress.kubernetes.io/ssl-redirect: 'true'
-    ingress.kubernetes.io/auth-tls-insecure: 'true'
-
 spec:
-  tls:
-    - hosts:
-        - grpc-poc.alinflorin.c1.kubesail.org
-      secretName: grpc-poc-ingress
   rules:
-    - host: grpc-poc.alinflorin.c1.kubesail.org
+    - host: grpc-poc-alinflorin.cloud.okteto.net
       http:
         paths:
           - path: /
