@@ -7,6 +7,9 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: kubesail-letsencrypt
     certmanager.k8s.io/cluster-issuer: kubesail-letsencrypt
+    ingress.kubernetes.io/ssl-redirect: 'true'
+    ingress.kubernetes.io/auth-tls-insecure: 'true'
+
 spec:
   tls:
     - hosts:
@@ -16,6 +19,7 @@ spec:
     - host: grpc-poc.alinflorin.c1.kubesail.org
       http:
         paths:
-          - backend:
+          - path: /
+            backend:
               serviceName: grpc-poc-ui-preact
               servicePort: 80
