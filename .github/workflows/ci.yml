@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout current repo
+      uses: actions/checkout@v2.3.1
+        
+    - name: Kubernetes set kube context
+      uses: Azure/k8s-set-context@v1
+      with:
+        method: kubeconfig
+        kubeconfig: ${{secrets.kubeConfig}}
+    
+    - name: Deploy to kube cluster
+      uses: Azure/k8s-deploy@v1
+      with:
+        namespace: alinflorin
+        images: |
+          ${{github.repository}}:${{github.sha}}
+        manifests: |
+          kubernetes.yaml
+        force: true
