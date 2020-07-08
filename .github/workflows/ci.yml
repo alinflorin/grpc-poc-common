@@ -20,8 +20,6 @@ jobs:
       uses: Azure/k8s-deploy@v1
       with:
         namespace: alinflorin
-        images: |
-          ${{github.repository}}:${{github.sha}}
         manifests: |
           kubernetes.yaml
         force: true
