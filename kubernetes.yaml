@@ -26,9 +26,9 @@ data:
                   domains: ["*"]
                   routes:
                   - match: { prefix: "/services/auth" }
-                    route: { cluster: grpc_poc_auth_dotnet, prefix_rewrite: "/" }
+                    route: { cluster: grpc_poc_auth_dotnet, prefix_rewrite: "" }
                   - match: { prefix: "/services/weather" }
-                    route: { cluster: grpc_poc_weather_java, prefix_rewrite: "/" }
+                    route: { cluster: grpc_poc_weather_java, prefix_rewrite: "" }
               http_filters:
               - name: envoy.grpc_web
               - name: envoy.router
