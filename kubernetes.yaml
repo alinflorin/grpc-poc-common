@@ -3,12 +3,7 @@ kind: ConfigMap
 metadata:
   name: grpc-poc-envoy
 data:
-  enconfig: |
-    admin:
-      access_log_path: /dev/stdout
-      profile_path: /tmp/envoy.prof
-      address:
-        socket_address: { address: 0.0.0.0, port_value: 9901 }
+  econfig: |
     static_resources:
       listeners:
       - name: listener_0
@@ -30,24 +25,24 @@ data:
                 - name: local_service
                   domains: ["*"]
                   routes:
-                  - match: { prefix: "/services/auth/" }
-                    route: { cluster: grpc_poc_auth_dotnet, prefix_rewrite: "/" }
-                  - match: { prefix: "/services/weather/" }
-                    route: { cluster: grpc_poc_weather_java, prefix_rewrite: "/" }
+                  - match: { prefix: "/services/auth" }
+                    route: { cluster: grpc_poc_auth_dotnet, prefix_rewrite: "" }
+                  - match: { prefix: "/services/weather" }
+                    route: { cluster: grpc_poc_weather_java, prefix_rewrite: "" }
               http_filters:
               - name: envoy.grpc_web
               - name: envoy.router
       clusters:
       - name: grpc_poc_auth_dotnet
         connect_timeout: 0.25s
-        type: strict_dns
+        type: logical_dns
         http2_protocol_options: {}
         lb_policy: round_robin
         hosts: [{ socket_address: { address: grpc-poc-auth-dotnet, port_value: 5000 }}]
 
       - name: grpc_poc_weather_java
         connect_timeout: 0.25s
-        type: strict_dns
+        type: logical_dns
         http2_protocol_options: {}
         lb_policy: round_robin
         hosts: [{ socket_address: { address: grpc-poc-weather-java, port_value: 9090 }}]
@@ -77,7 +72,7 @@ spec:
           volumeMounts:
             - name: grpc-poc-envoy
               mountPath: /etc/envoy/envoy.yaml
-              subPath: enconfig
+              subPath: econfig
       volumes:
         - name: grpc-poc-envoy
           configMap:
@@ -95,18 +90,6 @@ spec:
       targetPort: 8080
       name: http
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: grpc-poc-envoy-admin
-spec:
-  selector:
-    app: grpc-poc-envoy
-  ports:
-    - port: 9901
-      targetPort: 9901
-      name: http
----
 kind: Ingress
 apiVersion: networking.k8s.io/v1beta1
 metadata:
@@ -122,10 +105,6 @@ spec:
             backend:
               serviceName: grpc-poc-ui-preact
               servicePort: 80
-          - path: /admin
-            backend:
-              serviceName: grpc-poc-ui-preact-admin
-              servicePort: 9901
           - path: /services
             backend:
               serviceName: grpc-poc-envoy
