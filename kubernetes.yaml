@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: grpc-poc-envoy
 data:
-  envoyconfig: |
+  econfig: |
     static_resources:
       listeners:
       - name: listener_0
@@ -34,15 +34,15 @@ data:
               - name: envoy.router
       clusters:
       - name: grpc_poc_auth_dotnet
-        connect_timeout: 0.25s
-        type: static
+        connect_timeout: 0s
+        type: strict_dns
         http2_protocol_options: {}
         lb_policy: round_robin
         hosts: [{ socket_address: { address: grpc-poc-auth-dotnet, port_value: 5000 }}]
 
       - name: grpc_poc_weather_java
-        connect_timeout: 0.25s
-        type: static
+        connect_timeout: 0s
+        type: strict_dns
         http2_protocol_options: {}
         lb_policy: round_robin
         hosts: [{ socket_address: { address: grpc-poc-weather-java, port_value: 9090 }}]
@@ -71,7 +71,7 @@ spec:
           volumeMounts:
             - name: grpc-poc-envoy
               mountPath: /etc/envoy/envoy.yaml
-              subPath: envoyconfig
+              subPath: econfig
       volumes:
         - name: grpc-poc-envoy
           configMap:
