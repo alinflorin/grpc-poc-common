@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: grpc-poc-envoy
 data:
-  config: |
+  econfig: |
     static_resources:
       listeners:
       - name: listener_0
@@ -71,7 +71,7 @@ spec:
           volumeMounts:
             - name: grpc-poc-envoy
               mountPath: /etc/envoy/envoy.yaml
-              subPath: config
+              subPath: econfig
       volumes:
         - name: grpc-poc-envoy
           configMap:
