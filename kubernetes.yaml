@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: grpc-poc-envoy
 data:
-  evconfig: |
+  econfig: |
     static_resources:
       listeners:
       - name: listener_0
@@ -27,6 +27,8 @@ data:
                   routes:
                   - match: { prefix: "/services/auth" }
                     route: { cluster: grpc_poc_auth_dotnet, prefix_rewrite: "" }
+                  - match: { prefix: "/services/weather" }
+                    route: { cluster: grpc_poc_weather_java, prefix_rewrite: "" }
               http_filters:
               - name: envoy.grpc_web
               - name: envoy.router
@@ -69,7 +71,7 @@ spec:
           volumeMounts:
             - name: grpc-poc-envoy
               mountPath: /etc/envoy/envoy.yaml
-              subPath: evconfig
+              subPath: econfig
       volumes:
         - name: grpc-poc-envoy
           configMap:
