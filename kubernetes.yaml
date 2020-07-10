@@ -4,6 +4,11 @@ metadata:
   name: grpc-poc-envoy
 data:
   enconfig: |
+    admin:
+      access_log_path: /dev/stdout
+      profile_path: /tmp/envoy.prof
+      address:
+        socket_address: { address: 0.0.0.0, port_value: 9901 }
     static_resources:
       listeners:
       - name: listener_0
@@ -68,6 +73,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+            - containerPort: 9901
           volumeMounts:
             - name: grpc-poc-envoy
               mountPath: /etc/envoy/envoy.yaml
@@ -89,6 +95,18 @@ spec:
       targetPort: 8080
       name: http
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-poc-envoy-admin
+spec:
+  selector:
+    app: grpc-poc-envoy
+  ports:
+    - port: 9901
+      targetPort: 9901
+      name: http
+---
 kind: Ingress
 apiVersion: networking.k8s.io/v1beta1
 metadata:
@@ -104,6 +122,10 @@ spec:
             backend:
               serviceName: grpc-poc-ui-preact
               servicePort: 80
+          - path: /admin
+            backend:
+              serviceName: grpc-poc-ui-preact-admin
+              servicePort: 9901
           - path: /services
             backend:
               serviceName: grpc-poc-envoy
