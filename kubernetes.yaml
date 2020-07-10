@@ -68,7 +68,6 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
-            - containerPort: 9901
           volumeMounts:
             - name: grpc-poc-envoy
               mountPath: /etc/envoy/envoy.yaml
@@ -89,6 +88,7 @@ spec:
     - port: 8080
       targetPort: 8080
       name: http
+      protocol: TCP
 ---
 kind: Ingress
 apiVersion: networking.k8s.io/v1beta1
