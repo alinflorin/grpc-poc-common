@@ -114,7 +114,7 @@ spec:
           - path: /
             backend:
               serviceName: grpc-poc-ui-preact
-              servicePort: 80
+              servicePort: 8080
           - path: /services
             backend:
               serviceName: grpc-poc-envoy
