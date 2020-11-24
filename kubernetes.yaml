@@ -31,15 +31,19 @@ data:
                   domains: ["*"]
                   routes:
                   - match: { prefix: "/services/auth/" }
-                    route: { cluster: grpc_poc_auth_dotnet, prefix_rewrite: "/" }
-                  - match: { prefix: "/services/auth" }
-                    route: { cluster: grpc_poc_auth_dotnet, prefix_rewrite: "/" }
+                    route: { cluster: grpc_poc_auth_dotnet, prefix_rewrite: "/", max_grpc_timeout: 0s }
                   - match: { prefix: "/services/weather/" }
-                    route: { cluster: grpc_poc_weather_java, prefix_rewrite: "/" }
-                  - match: { prefix: "/services/weather" }
-                    route: { cluster: grpc_poc_weather_java, prefix_rewrite: "/" }
+                    route: { cluster: grpc_poc_weather_java, prefix_rewrite: "/", max_grpc_timeout: 0s }
+                  cors:
+                    allow_origin_string_match:
+                    - prefix: "*"
+                    allow_methods: GET, PUT, DELETE, POST, OPTIONS
+                    allow_headers: keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,custom-header-1,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web,grpc-timeout
+                    max_age: "1728000"
+                    expose_headers: custom-header-1,grpc-status,grpc-message
               http_filters:
               - name: envoy.grpc_web
+              - name: envoy.cors
               - name: envoy.router
       clusters:
       - name: grpc_poc_auth_dotnet
