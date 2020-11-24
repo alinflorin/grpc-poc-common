@@ -1,5 +1,5 @@
 @echo off
-:SET KUBECONFIG=%CD%\\kubeconfig.yaml
+
 cd ../
 
 kubectl delete -f grpc-poc-common/kubernetes.yaml -n grpc-poc
