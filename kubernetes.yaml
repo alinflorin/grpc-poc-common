@@ -112,7 +112,7 @@ metadata:
     app: grpc-poc
 spec:
   rules:
-    - host: minikube.local
+    - host: alinflorin.cloud.okteto.net
       http:
         paths:
           - path: /
