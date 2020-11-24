@@ -1,9 +1,4 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-   name: grpc-poc
----
-apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grpc-poc-envoy
